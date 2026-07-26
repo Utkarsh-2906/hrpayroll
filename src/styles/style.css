@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+@theme {
+  /* BREAKPOINTS */
+  --breakpoint-1920: 1921px;
+  --breakpoint-1600: 1601px;
+  --breakpoint-1512: 1513px;
+  --breakpoint-1440: 1441px;
+  --breakpoint-1366: 1367px;
+  --breakpoint-1199: 1200px;
+  --breakpoint-1024: 1025px;
+  --breakpoint-992: 993px;
+  --breakpoint-768: 769px;
+  --breakpoint-640: 641px;
+  --breakpoint-576: 577px;
+  --breakpoint-425: 426px;
+  --breakpoint-375: 376px;
+
+  /* SPACING */
+  --spacing: 1px;
+
+  /* FONT FAMILY */
+  --font-inter: "Inter", sans-serif;
+
+  /* COLORS */
+  --color-white: #ffffff;
+  --color-black: #1a1a1a;
+  --color-brand-start: #00aeef;
+  --color-brand-end: #33bef2;
+  --color-gray-50: #f7f9fa;
+  --color-gray-100: #eef1f3;
+  --color-gray-200: #dde3e7;
+  --color-gray-400: #9aa5ac;
+  --color-gray-600: #5c6b73;
+  --color-success: #1f9d55;
+  --color-danger: #e0344c;
+  --color-warning: #d9a412;
+
+  /* FONT SIZE */
+  --text-heading-1: 40px;
+  --text-heading-2: 32px;
+  --text-heading-3: 28px;
+  --text-heading-4: 24px;
+  --text-heading-5: 20px;
+  --text-heading-6: 18px;
+
+  --text-16: 16px;
+  --text-14: 14px;
+  --text-12: 12px;
+}
+
+@import "./base.css";
+@import "./component.css";
+@import "./layout.css";
+@import "./utilities.css";

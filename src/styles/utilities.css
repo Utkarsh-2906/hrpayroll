@@ -1,0 +1,225 @@
+.muster-roll-section .section-inner {
+  @apply flex flex-col gap-32 max-w-1024;
+}
+
+.hero-block {
+  @apply flex flex-col gap-12 max-w-640;
+}
+
+.eyebrow-badge {
+  @apply inline-flex items-center gap-8 px-14 py-6 rounded-full bg-brand-start/10 text-brand-start text-12 font-bold uppercase;
+  letter-spacing: 0.04em;
+}
+
+.steps-row {
+  @apply grid grid-cols-1 gap-16 min-640:grid-cols-3;
+}
+
+.step-card {
+  @apply flex items-start gap-12 bg-white border border-solid border-gray-200 rounded-2xl p-16 transition hover:border-brand-start/40 hover:shadow-sm;
+}
+
+.step-number {
+  @apply inline-flex items-center justify-center w-32 h-32 rounded-full bg-brand-start/10 text-brand-start text-14 font-bold shrink-0;
+}
+
+.step-copy {
+  @apply flex flex-col;
+}
+
+.step-title {
+  @apply text-14 font-semibold text-black;
+}
+
+.step-desc {
+  @apply text-12 text-gray-600 mt-4;
+}
+
+.form-card {
+  @apply bg-white border border-solid border-gray-200 rounded-2xl p-24 flex flex-col gap-20 shadow-sm min-768:p-32;
+}
+
+.form-card-header {
+  @apply flex items-center gap-12;
+}
+
+.form-card-icon {
+  @apply inline-flex items-center justify-center w-40 h-40 rounded-xl bg-brand-start/10 text-brand-start shrink-0;
+}
+
+.form-grid {
+  @apply grid grid-cols-1 gap-20 min-640:grid-cols-2 min-1024:grid-cols-3;
+}
+
+.field-group {
+  @apply flex flex-col;
+}
+
+.field-group-wide {
+  @apply min-640:col-span-2 min-1024:col-span-3;
+}
+
+.status-banner {
+  @apply flex items-start gap-12 px-16 py-14 rounded-xl text-14 border border-solid border-l-4;
+}
+
+.status-banner-error {
+  @apply bg-danger/5 border-danger/15 border-l-danger text-danger;
+}
+
+.status-banner-warning {
+  @apply bg-warning/5 border-warning/15 border-l-warning text-warning;
+}
+
+.status-banner-success {
+  @apply bg-success/5 border-success/15 border-l-success text-success;
+}
+
+.banner-icon {
+  @apply inline-flex items-center justify-center w-32 h-32 rounded-full bg-white shrink-0;
+}
+
+.banner-title {
+  @apply font-semibold text-black mb-2;
+}
+
+.banner-message-list {
+  @apply flex flex-col gap-6;
+}
+
+.result-panel {
+  @apply flex flex-col gap-20;
+}
+
+.result-header {
+  @apply flex flex-col gap-4 min-640:flex-row min-640:items-center min-640:justify-between;
+}
+
+.result-summary {
+  @apply flex items-center gap-10;
+}
+
+.icon-success {
+  @apply text-success;
+}
+
+.employee-count-badge {
+  @apply inline-flex items-center gap-6 px-12 py-6 rounded-full bg-success/10 text-14 font-semibold text-success;
+}
+
+.stat-grid {
+  @apply grid grid-cols-2 gap-16 min-768:grid-cols-4;
+}
+
+.stat-card {
+  @apply flex items-center gap-12 bg-white border border-solid border-gray-200 rounded-2xl p-16 shadow-sm transition hover:shadow-md hover:-translate-y-1;
+}
+
+.stat-icon {
+  @apply inline-flex items-center justify-center w-40 h-40 rounded-full shrink-0;
+}
+
+.stat-icon-brand {
+  @apply bg-brand-start/10 text-brand-start;
+}
+
+.stat-icon-success {
+  @apply bg-success/10 text-success;
+}
+
+.stat-icon-danger {
+  @apply bg-danger/10 text-danger;
+}
+
+.stat-icon-warning {
+  @apply bg-warning/10 text-warning;
+}
+
+.stat-copy {
+  @apply flex flex-col;
+}
+
+.stat-value {
+  @apply text-heading-4 font-bold text-black leading-none;
+}
+
+.stat-label {
+  @apply text-12 text-gray-600 mt-6;
+}
+
+.legend-row {
+  @apply flex flex-wrap items-center gap-16 px-16 py-12 bg-gray-50 border border-solid border-gray-200 rounded-xl;
+}
+
+.legend-item {
+  @apply inline-flex items-center gap-8 text-12 font-medium text-gray-600;
+}
+
+.preview-table-wrap {
+  @apply w-full overflow-auto border border-solid border-gray-200 rounded-2xl shadow-sm;
+}
+
+.preview-table {
+  @apply w-full border-collapse text-14;
+}
+
+.preview-table th,
+.preview-table td {
+  @apply border-b border-solid border-gray-200 px-12 py-10 text-center whitespace-nowrap;
+}
+
+.preview-table th {
+  @apply sticky top-0 z-10 bg-gray-100 font-semibold text-12 uppercase text-gray-600;
+}
+
+.preview-table tbody tr {
+  @apply transition hover:bg-brand-start/5;
+}
+
+.preview-table tbody tr:nth-child(even) {
+  @apply bg-gray-50;
+}
+
+.preview-table td:nth-child(2) {
+  @apply sticky left-0 z-10 bg-white text-left whitespace-normal font-medium;
+}
+
+.preview-table tbody tr:nth-child(even) td:nth-child(2) {
+  @apply bg-gray-50;
+}
+
+.preview-table th:nth-child(2) {
+  @apply sticky left-0 z-20 text-left;
+}
+
+.day-badge {
+  @apply inline-flex items-center justify-center w-28 h-28 rounded-full text-12 font-bold;
+}
+
+.day-badge-present {
+  @apply bg-success/10 text-success;
+}
+
+.day-badge-absent {
+  @apply bg-danger/10 text-danger;
+}
+
+.day-badge-weekoff {
+  @apply bg-gray-200 text-gray-600;
+}
+
+.day-badge-half {
+  @apply bg-warning/10 text-warning;
+}
+
+.day-badge-holiday {
+  @apply bg-brand-start/10 text-brand-start;
+}
+
+.day-badge-notjoined {
+  @apply bg-gray-100 text-gray-400;
+}
+
+.button-row {
+  @apply flex flex-col gap-16 min-640:flex-row;
+}

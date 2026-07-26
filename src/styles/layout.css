@@ -1,0 +1,40 @@
+header {
+  @apply sticky top-0 z-50 bg-white/80 border-b border-solid border-gray-200 backdrop-blur;
+}
+
+header .header-inner {
+  @apply flex items-center justify-between gap-16 py-14;
+}
+
+header .header-brand-group {
+  @apply flex items-center gap-12;
+}
+
+header .header-logo-mark {
+  @apply inline-flex items-center justify-center w-40 h-40 rounded-xl text-white shrink-0 shadow-sm;
+  background-image: linear-gradient(135deg, var(--color-brand-start), var(--color-brand-end));
+}
+
+header .header-text-group {
+  @apply flex flex-col leading-none;
+}
+
+header .header-brand {
+  @apply text-heading-6 font-bold;
+  background-image: linear-gradient(135deg, var(--color-brand-start), var(--color-brand-end));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+header .header-tagline {
+  @apply text-12 text-gray-400 mt-4;
+}
+
+footer {
+  @apply bg-white border-t border-solid border-gray-200;
+}
+
+footer .footer-inner {
+  @apply flex items-center justify-center gap-8 py-16 text-gray-400;
+}

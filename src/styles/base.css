@@ -1,0 +1,87 @@
+html {
+  @apply font-inter;
+}
+
+body {
+  @apply text-black bg-gray-50;
+}
+
+a {
+  @apply text-black no-underline hover:opacity-70 transition;
+}
+
+h1,
+.h1 {
+  @apply text-heading-1 font-bold max-768:text-heading-3;
+}
+
+h2,
+.h2 {
+  @apply text-heading-2 font-bold max-768:text-heading-4;
+}
+
+h3,
+.h3 {
+  @apply text-heading-3 font-semibold max-768:text-heading-5;
+}
+
+h4,
+.h4 {
+  @apply text-heading-4 font-semibold max-768:text-heading-6;
+}
+
+h5,
+.h5 {
+  @apply text-heading-5 font-semibold max-768:text-16;
+}
+
+h6,
+.h6 {
+  @apply text-heading-6 font-semibold max-768:text-16;
+}
+
+.content p {
+  @apply text-16 leading-relaxed;
+}
+
+.content p + p {
+  @apply mt-10;
+}
+
+.title-black h1,
+.title-black h2,
+.title-black h3,
+.title-black h4,
+.title-black h5,
+.title-black h6 {
+  @apply text-black;
+}
+
+.title-white h1,
+.title-white h2,
+.title-white h3,
+.title-white h4,
+.title-white h5,
+.title-white h6 {
+  @apply text-white;
+}
+
+.content-black p {
+  @apply text-black;
+}
+
+.content-white p {
+  @apply text-white;
+}
+
+.content-gray p {
+  @apply text-gray-600;
+}
+
+.container-fluid {
+  @apply px-16 max-768:px-16 min-768:px-40 min-1199:px-60;
+}
+
+.general-padding {
+  @apply py-40 max-768:py-20;
+}
