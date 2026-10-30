@@ -4,6 +4,7 @@ const NAME_KEYS = ['employeename', 'employee name', 'name', 'empname', 'employee
 const PRESENT_KEYS = ['presentdays', 'present days', 'present', 'p']
 const ABSENT_KEYS = ['absentdays', 'absent days', 'absent', 'a']
 const JOIN_DATE_KEYS = ['joiningdate', 'joining date', 'dateofjoining', 'date of joining', 'doj']
+const HOLIDAY_KEYS = ['holiday', 'holidays', 'getholiday', 'get holiday', 'holiday given']
 
 function normalizeKey(key) {
   return String(key).trim().toLowerCase()
@@ -70,6 +71,7 @@ export async function parseEmployeeFile(file) {
     const presentRaw = findValue(row, PRESENT_KEYS)
     const absentRaw = findValue(row, ABSENT_KEYS)
     const joinDateRaw = findValue(row, JOIN_DATE_KEYS)
+    const holidayRaw = findValue(row, HOLIDAY_KEYS)
 
     if (!name || String(name).trim() === '') return // skip blank rows
 
@@ -93,11 +95,19 @@ export async function parseEmployeeFile(file) {
       return
     }
 
+    // Holiday column: blank/Yes/Y/true → gets holiday (default). No/N/false/0 → penalty rule applies.
+    let getsHoliday = true
+    if (holidayRaw !== undefined && String(holidayRaw).trim() !== '') {
+      const val = String(holidayRaw).trim().toLowerCase()
+      getsHoliday = !['no', 'n', 'false', '0'].includes(val)
+    }
+
     employees.push({
       name: String(name).trim(),
       presentDays,
       absentDays,
       joiningDate: joiningDate ?? null,
+      getsHoliday,
     })
   })
 
@@ -227,6 +237,62 @@ export function distributeAttendance({ employeeName, periodKey, workingDays, abs
 }
 
 /**
+ * For employees who don't get holidays (getsHoliday = false), computes the
+ * set of calendar days that must be forced as Absent: the holiday day itself
+ * plus the day immediately before and after each holiday.
+ *
+ * Week-off jump rule (single week-off per week):
+ *   - If the day BEFORE the holiday is a week-off → also mark (week-off − 1) as A
+ *   - If the day AFTER  the holiday is a week-off → also mark (week-off + 1) as A
+ *   Week-off days themselves always stay W.
+ *
+ * Days before the employee's joining day are excluded from the forced set.
+ */
+function getForcedAbsentDays({ holidayDays, weekOffDays, joinDay, totalDays }) {
+  const weekOffSet = new Set(weekOffDays)
+  const forced = new Set()
+
+  for (const holiday of holidayDays) {
+    // Holiday day itself
+    forced.add(holiday)
+
+    // Day before the holiday
+    const dayBefore = holiday - 1
+    if (dayBefore >= 1) {
+      if (weekOffSet.has(dayBefore)) {
+        // Day before is a week-off → jump over it, mark the day before the week-off
+        const jumpBefore = dayBefore - 1
+        if (jumpBefore >= 1) forced.add(jumpBefore)
+      } else {
+        forced.add(dayBefore)
+      }
+    }
+
+    // Day after the holiday
+    const dayAfter = holiday + 1
+    if (dayAfter <= totalDays) {
+      if (weekOffSet.has(dayAfter)) {
+        // Day after is a week-off → jump over it, mark the day after the week-off
+        const jumpAfter = dayAfter + 1
+        if (jumpAfter <= totalDays) forced.add(jumpAfter)
+      } else {
+        forced.add(dayAfter)
+      }
+    }
+  }
+
+  // Week-off days must stay W, not be overridden to A
+  for (const day of weekOffSet) forced.delete(day)
+
+  // Days before joining stay NJ
+  for (const day of [...forced]) {
+    if (day < joinDay) forced.delete(day)
+  }
+
+  return [...forced].sort((a, b) => a - b)
+}
+
+/**
  * Resolves the first day-of-month (1-based) an employee is considered
  * employed for this salary month, based on their joining date:
  * - no joining date, or joined before this month → day 1 (no restriction)
@@ -267,7 +333,38 @@ export function buildMusterRollData({
 
   const rows = employees.map((employee, index) => {
     const joinDay = resolveJoinDay(employee.joiningDate, year, month, calendar.totalDays)
-    const workingDaysForEmployee = calendar.workingDays.filter((day) => day >= joinDay)
+
+    // Only protect the joining day from being marked absent when the
+    // employee actually joined during THIS month. When there's no joining
+    // date or they joined before this month, resolveJoinDay returns 1 as a
+    // "no restriction" sentinel — that should NOT protect day 1 from absences.
+    const joinedThisMonth = employee.joiningDate
+      && employee.joiningDate.getFullYear() === year
+      && employee.joiningDate.getMonth() === month
+    const protectedJoinDay = joinedThisMonth ? joinDay : undefined
+
+    // For employees who don't get holidays, compute forced-absent days
+    // (holiday day ± 1, minus week-offs and pre-joining days).
+    let forcedAbsentSet = new Set()
+    if (employee.getsHoliday === false && calendar.holidayDays.length > 0) {
+      const forcedDays = getForcedAbsentDays({
+        holidayDays: calendar.holidayDays,
+        weekOffDays: calendar.weekOffDays,
+        joinDay,
+        totalDays: calendar.totalDays,
+      })
+      forcedAbsentSet = new Set(forcedDays)
+      if (forcedDays.length > 0) {
+        warnings.push(
+          `${employee.name}: Holiday not given — forced absent on day(s): ${forcedDays.join(', ')}.`
+        )
+      }
+    }
+
+    // Exclude forced-absent days from the distributable working-day pool
+    const workingDaysForEmployee = calendar.workingDays.filter(
+      (day) => day >= joinDay && !forcedAbsentSet.has(day)
+    )
     const expected = workingDaysForEmployee.length
 
     if (joinDay > calendar.totalDays) {
@@ -324,12 +421,13 @@ export function buildMusterRollData({
       workingDays: workingDaysForEmployee,
       absentDays,
       hasHalfDay,
-      joinDay,
+      joinDay: protectedJoinDay,
     })
 
     const dayStatus = calendar.days.map((d) => {
       if (d.day < joinDay) return 'NJ'
       if (d.isWeekOff) return 'W'
+      if (forcedAbsentSet.has(d.day)) return 'A'   // holiday penalty: forced absent
       if (d.isHoliday) return 'H'
       return statusByDay[d.day]
     })

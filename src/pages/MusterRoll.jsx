@@ -150,8 +150,8 @@ function MusterRoll() {
                   </span>
                 )}
                 <span className="dropzone-hint">
-                  Columns expected: Employee Name, Present Days (Absent Days is auto-calculated from this),
-                  Joining Date (optional, DD-MM-YYYY)
+                  Columns expected: Employee Name, Present Days (Absent Days is auto-calculated),
+                  Joining Date (optional, DD-MM-YYYY), Holiday (optional, Yes/No — &ldquo;No&rdquo; applies holiday penalty on surrounding days)
                 </span>
                 {file && (
                   <span className="dropzone-filename">
